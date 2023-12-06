@@ -20,15 +20,16 @@ The API has the following endpoints:
 # Instructions
 
 1. Create an exact copy of the React application with the following features:
-   1. Create a nav bar that contains links to the following pages:
+   1. Use `fetch` instead of `axios` so we can later play around with some of the advanced features of `fetch` built into Next.js.
+   2. Create a nav bar that contains links to the following pages:
       - Posts
       - Users
       - Todos
-   2. Create a Posts page that renders out all of the posts from the API in a card based grid where each card contains the title, body, and a link to view the post.
-   3. Create a Users page that renders out all of the users from the API in a card based grid where each card contains the user name, company name, email, website, and a link to view the user.
-   4. Create a Todos page that renders out all of the todos from the API in a list where each item contains the todo title and is crossed off if completed.
-   5. Create a Post page that renders out the post title, body, comments, and user name.
-   6. Create a User page that renders out the user name, company name, email, website, and address as well as the users's posts and todos.
+   3. Create a Posts page that renders out all of the posts from the API in a card based grid where each card contains the title, body, and a link to view the post.
+   4. Create a Users page that renders out all of the users from the API in a card based grid where each card contains the user name, company name, email, website, and a link to view the user.
+   5. Create a Todos page that renders out all of the todos from the API in a list where each item contains the todo title and is crossed off if completed.
+   6. Create a Post page that renders out the post title, body, comments, and user name.
+   7. Create a User page that renders out the user name, company name, email, website, and address as well as the users's posts and todos.
 
 ## Bonus:
 
