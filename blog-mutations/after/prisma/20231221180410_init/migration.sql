@@ -35,5 +35,5 @@ CREATE TABLE "Comment" (
     "email" TEXT NOT NULL,
     "body" TEXT NOT NULL,
     "postId" INTEGER NOT NULL,
-    CONSTRAINT "Comment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Comment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
