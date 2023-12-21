@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client"
 import prisma from "./db"
-import { cache } from "react"
 import { unstable_cache } from "next/cache"
+import { cache } from "react"
 
 export const getPosts = unstable_cache(
   cache(
@@ -37,7 +37,7 @@ export const getPost = unstable_cache(
     await wait(2000)
     return prisma.post.findUnique({ where: { id: Number(postId) } })
   }),
-  ["posts", "id"]
+  ["posts", "postId"]
 )
 
 export const getUserPosts = unstable_cache(

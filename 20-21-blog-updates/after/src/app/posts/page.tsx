@@ -1,15 +1,13 @@
 import { getPosts } from "@/db/posts"
 import { getUsers } from "@/db/users"
+import { FormGroup } from "@/components/FormGroup"
 import { PostCard, SkeletonPostCard } from "@/components/PostCard"
 import { SkeletonList } from "@/components/Skeleton"
 import { Suspense } from "react"
 import { SearchForm } from "./searchForm"
 
 type PageProps = {
-  searchParams: {
-    query?: string
-    userId?: string
-  }
+  searchParams: { query?: string; userId?: string }
 }
 
 export default function PostsPage({
@@ -19,7 +17,7 @@ export default function PostsPage({
     <>
       <h1 className="page-title">Posts</h1>
 
-      <SearchForm userOptions={<UserSelectOptions />} />
+      <SearchForm userOptions={<UserSelect />} />
 
       <div className="card-grid">
         <Suspense
@@ -30,20 +28,20 @@ export default function PostsPage({
             </SkeletonList>
           }
         >
-          <PostGrid query={query} userId={userId} />
+          <PostGrid userId={userId} query={query} />
         </Suspense>
       </div>
     </>
   )
 }
 
-async function PostGrid({ query, userId }: { query: string; userId: string }) {
+async function PostGrid({ userId, query }: { userId: string; query: string }) {
   const posts = await getPosts({ query, userId })
 
   return posts.map(post => <PostCard key={post.id} {...post} />)
 }
 
-async function UserSelectOptions() {
+async function UserSelect() {
   const users = await getUsers()
 
   return (

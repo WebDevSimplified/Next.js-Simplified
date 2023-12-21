@@ -1,17 +1,11 @@
 import { getUserPosts } from "@/db/posts"
 import { getUserTodos } from "@/db/todos"
-import { getUser, getUsers } from "@/db/users"
+import { getUser } from "@/db/users"
 import { PostCard, SkeletonPostCard } from "@/components/PostCard"
 import { Skeleton, SkeletonList } from "@/components/Skeleton"
 import { TodoItem } from "@/components/TodoItem"
 import { Suspense } from "react"
 import { notFound } from "next/navigation"
-
-export async function generateStaticParams() {
-  return (await getUsers()).map(user => ({
-    params: { userId: user.id.toString() },
-  }))
-}
 
 export default function UserPage({
   params: { userId },

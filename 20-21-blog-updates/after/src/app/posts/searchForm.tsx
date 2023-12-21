@@ -5,19 +5,20 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { FormEvent, ReactNode, Suspense, useRef } from "react"
 
 export function SearchForm({ userOptions }: { userOptions: ReactNode }) {
-  const queryRef = useRef<HTMLInputElement>(null)
-  const selectRef = useRef<HTMLSelectElement>(null)
   const router = useRouter()
-  const pathname = usePathname()
   const searchParams = useSearchParams()
+  const pathname = usePathname()
   const query = searchParams.get("query") || ""
   const userId = searchParams.get("userId") || ""
+  const queryRef = useRef<HTMLInputElement>(null)
+  const userRef = useRef<HTMLSelectElement>(null)
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
+
     const params = new URLSearchParams(searchParams)
     params.set("query", queryRef.current?.value || "")
-    params.set("userId", selectRef.current?.value || "")
+    params.set("userId", userRef.current?.value || "")
 
     router.push(`${pathname}?${params.toString()}`)
   }
@@ -37,12 +38,7 @@ export function SearchForm({ userOptions }: { userOptions: ReactNode }) {
         </FormGroup>
         <FormGroup>
           <label htmlFor="userId">Author</label>
-          <select
-            name="userId"
-            id="userId"
-            defaultValue={userId}
-            ref={selectRef}
-          >
+          <select name="userId" id="userId" defaultValue={userId} ref={userRef}>
             <Suspense fallback={<option value="">Loading...</option>}>
               {userOptions}
             </Suspense>
