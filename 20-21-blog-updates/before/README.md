@@ -25,9 +25,3 @@ All the functions you need to access the database are already created in the `sr
 1. Replace all the `fetch` calls in the `src/api` folder with calls to the database functions in the `src/db` folder. I manually added a 2 second delay to each database function call so you can still see your loading states.
 2. Add a search form to the `src/app/posts/page.tsx` page that allows the user to search for posts by `title`/`body` and the `userId`.
    - This search form will most likely use a combination of the `searchParams` prop, the `useSearchParams` hook, and the `useRouter` hook to update the URL when the user submits the form.
-
-## Bonus:
-
-1. Add a skeleton loading UI to each page.
-2. Make sure that all API request are done performed as optimally as possible by making all requests in parallel when possible.
-3. Use the `loading.tsx` page for at least one loading UI and use `Suspense` for at least one other page to practice both techniques.
