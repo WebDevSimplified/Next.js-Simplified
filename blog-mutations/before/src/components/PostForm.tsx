@@ -3,30 +3,18 @@ import { Suspense } from "react"
 import Link from "next/link"
 import { SkeletonInput } from "./Skeleton"
 import { UserSelectOptions } from "@/app/posts/userSelectOptions"
-import { getPost } from "@/db/posts"
 
-type Props = {
-  postId?: string
-}
-
-export async function PostForm({ postId }: Props) {
-  const post = postId ? await getPost(postId) : null
-
+export async function PostForm() {
   return (
     <form className="form">
       <div className="form-row">
         <FormGroup errorMessage="Placeholder Error Message">
           <label htmlFor="title">Title</label>
-          <input
-            type="text"
-            name="title"
-            id="title"
-            defaultValue={post?.title || ""}
-          />
+          <input type="text" name="title" id="title" />
         </FormGroup>
         <FormGroup>
           <label htmlFor="userId">Author</label>
-          <select name="userId" id="userId" defaultValue={post?.userId || ""}>
+          <select name="userId" id="userId">
             <Suspense fallback={<option value="">Loading...</option>}>
               <UserSelectOptions />
             </Suspense>
@@ -36,14 +24,11 @@ export async function PostForm({ postId }: Props) {
       <div className="form-row">
         <FormGroup>
           <label htmlFor="body">Body</label>
-          <textarea name="body" id="body" defaultValue={post?.body || ""} />
+          <textarea name="body" id="body" />
         </FormGroup>
       </div>
       <div className="form-row form-btn-row">
-        <Link
-          className="btn btn-outline"
-          href={post == null ? "posts" : `posts/${postId}`}
-        >
+        <Link className="btn btn-outline" href="/posts">
           Cancel
         </Link>
         <button className="btn">Save</button>
@@ -72,7 +57,7 @@ export function SkeletonPostForm() {
         </FormGroup>
       </div>
       <div className="form-row form-btn-row">
-        <Link className="btn btn-outline" href="..">
+        <Link className="btn btn-outline" href="/posts">
           Cancel
         </Link>
         <button disabled className="btn">
@@ -82,21 +67,3 @@ export function SkeletonPostForm() {
     </form>
   )
 }
-
-// export function postFormValidator({ title, body, userId }) {
-//   const errors = {}
-
-//   if (title === "") {
-//     errors.title = "Required"
-//   }
-
-//   if (body === "") {
-//     errors.body = "Required"
-//   }
-
-//   if (userId === "") {
-//     errors.userId = "Required"
-//   }
-
-//   return errors
-// }

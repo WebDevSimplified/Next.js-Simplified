@@ -24,7 +24,7 @@ export default function PostsPage({
         </div>
       </h1>
 
-      <SearchForm userOptions={<UserSelectOptions />} />
+      <SearchForm userOptions={<UserSelectOptions withAnyOption />} />
 
       <div className="card-grid">
         <Suspense
