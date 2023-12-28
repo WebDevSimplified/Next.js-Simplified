@@ -32,7 +32,7 @@ export async function updatePost(
   revalidatePath("/posts")
   revalidatePath(`/posts/${postId}`)
   revalidatePath(`/users/${post.userId}`)
-  redirect("/posts")
+  redirect(`/posts/${postId}`)
 }
 
 export async function deletePost(postId: string | number) {
