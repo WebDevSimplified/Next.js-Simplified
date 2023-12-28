@@ -4,7 +4,7 @@ import Link from "next/link"
 import { SkeletonInput } from "./Skeleton"
 import { UserSelectOptions } from "@/app/posts/userSelectOptions"
 
-export async function PostForm() {
+export function PostForm() {
   return (
     <form className="form">
       <div className="form-row">

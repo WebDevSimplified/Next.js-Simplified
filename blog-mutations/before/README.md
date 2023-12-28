@@ -30,3 +30,4 @@ All the functions you need to access the database are already created in the `sr
    - This includes page loading states and button/form loading states.
 2. Add data validation to the new/edit pages that requires the title/userId/body to be filled in.
    - This data validation should be done within the server action as well as on the client with the `required` HTML attribute.
+3. Ensure the post and users load in parallel on the edit post page.
