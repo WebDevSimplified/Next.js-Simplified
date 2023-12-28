@@ -5,17 +5,16 @@ import { ReactNode, Suspense } from "react"
 import Link from "next/link"
 import { SkeletonInput } from "./Skeleton"
 import { useFormState, useFormStatus } from "react-dom"
+import { createPostAction, editPostAction } from "@/app/actions/post"
 
 type Props = {
-  post?: { id: number; title: string; body: string; userId: number }
   userSelectOptions: ReactNode
-  action: (
-    prevState: unknown,
-    formData: FormData
-  ) => Promise<{ title?: string; body?: string; userId?: string }>
+  post?: { id: number; title: string; body: string; userId: number }
 }
 
-export function PostForm({ action, userSelectOptions, post }: Props) {
+export function PostForm({ post, userSelectOptions }: Props) {
+  const action =
+    post == null ? createPostAction : editPostAction.bind(null, post.id)
   const [errors, formAction] = useFormState(action, {})
 
   return (
@@ -27,12 +26,18 @@ export function PostForm({ action, userSelectOptions, post }: Props) {
             type="text"
             name="title"
             id="title"
-            defaultValue={post?.title || ""}
+            required
+            defaultValue={post?.title}
           />
         </FormGroup>
         <FormGroup errorMessage={errors.userId}>
           <label htmlFor="userId">Author</label>
-          <select name="userId" id="userId" defaultValue={post?.userId || ""}>
+          <select
+            required
+            name="userId"
+            id="userId"
+            defaultValue={post?.userId}
+          >
             <Suspense fallback={<option value="">Loading...</option>}>
               {userSelectOptions}
             </Suspense>
@@ -42,13 +47,13 @@ export function PostForm({ action, userSelectOptions, post }: Props) {
       <div className="form-row">
         <FormGroup errorMessage={errors.body}>
           <label htmlFor="body">Body</label>
-          <textarea name="body" id="body" defaultValue={post?.body || ""} />
+          <textarea required name="body" id="body" defaultValue={post?.body} />
         </FormGroup>
       </div>
       <div className="form-row form-btn-row">
         <Link
           className="btn btn-outline"
-          href={post == null ? "/posts" : `/posts/${post.id}`}
+          href={post ? `/posts/${post.id}` : "/posts"}
         >
           Cancel
         </Link>
@@ -68,7 +73,7 @@ function SubmitButton() {
   )
 }
 
-export function SkeletonPostForm({ postId }: { postId?: string }) {
+export function SkeletonPostForm() {
   return (
     <form className="form">
       <div className="form-row">
@@ -88,10 +93,7 @@ export function SkeletonPostForm({ postId }: { postId?: string }) {
         </FormGroup>
       </div>
       <div className="form-row form-btn-row">
-        <Link
-          className="btn btn-outline"
-          href={postId == null ? "/posts" : `/posts/${postId}`}
-        >
+        <Link className="btn btn-outline" href="/posts">
           Cancel
         </Link>
         <button disabled className="btn">

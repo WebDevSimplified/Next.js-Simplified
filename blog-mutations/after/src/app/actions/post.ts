@@ -1,47 +1,43 @@
 "use server"
 
-import {
-  deletePost as deletePostFromDB,
-  updatePost as updatePostFromDB,
-  createPost as createPostFromDB,
-} from "@/db/posts"
+import { createPost, deletePost, updatePost } from "@/db/posts"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
-export async function createPost(prevState: unknown, formData: FormData) {
-  const [data, errors] = validatePost(formData)
-  if (!data) return errors
-
-  const post = await createPostFromDB(data)
+export async function deletePostAction(postId: string | number) {
+  const post = await deletePost(postId)
 
   revalidatePath("/posts")
   revalidatePath(`/users/${post.userId}`)
+  revalidatePath(`/posts/${post.id}`)
   redirect("/posts")
 }
 
-export async function updatePost(
-  postId: string | number,
+export async function editPostAction(
+  postId: number,
   prevState: unknown,
   formData: FormData
 ) {
   const [data, errors] = validatePost(formData)
-  if (!data) return errors
+  if (data == null) return errors
 
-  const post = await updatePostFromDB(postId, data)
+  const post = await updatePost(postId, data)
 
   revalidatePath("/posts")
-  revalidatePath(`/posts/${postId}`)
+  revalidatePath(`/posts/${post.id}`)
   revalidatePath(`/users/${post.userId}`)
-  redirect(`/posts/${postId}`)
+  redirect(`/posts/${post.id}`)
 }
 
-export async function deletePost(postId: string | number) {
-  const post = await deletePostFromDB(postId)
+export async function createPostAction(prevState: unknown, formData: FormData) {
+  const [data, errors] = validatePost(formData)
+  if (data == null) return errors
+
+  const post = await createPost(data)
 
   revalidatePath("/posts")
-  revalidatePath(`/posts/${postId}`)
   revalidatePath(`/users/${post.userId}`)
-  redirect("/posts")
+  redirect(`/posts/${post.id}`)
 }
 
 function validatePost(formData: FormData) {

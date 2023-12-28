@@ -1,8 +1,7 @@
-import { updatePost } from "@/actions/posts"
 import { PostForm } from "@/components/PostForm"
-import { UserSelectOptions } from "../../userSelectOptions"
 import { getPost } from "@/db/posts"
 import { notFound } from "next/navigation"
+import { UserSelectOptions } from "../../userSelectOptions"
 import { getUsers } from "@/db/users"
 
 export default async function EditPostPage({
@@ -18,9 +17,8 @@ export default async function EditPostPage({
     <>
       <h1 className="page-title">Edit Post</h1>
       <PostForm
-        post={post}
-        action={updatePost.bind(null, postId)}
         userSelectOptions={<UserSelectOptions users={users} />}
+        post={post}
       />
     </>
   )

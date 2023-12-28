@@ -1,6 +1,6 @@
 import { SkeletonPostForm } from "@/components/PostForm"
 
-export default async function EditPostPage() {
+export default function LoadingEditPostPage() {
   return (
     <>
       <h1 className="page-title">Edit Post</h1>

@@ -5,7 +5,7 @@ import { Skeleton, SkeletonList } from "@/components/Skeleton"
 import Link from "next/link"
 import { Suspense } from "react"
 import { notFound } from "next/navigation"
-import { DeleteButton } from "./deleteButton"
+import { DeleteButton } from "./DeleteButton"
 
 export default function PostPage({
   params: { postId },
