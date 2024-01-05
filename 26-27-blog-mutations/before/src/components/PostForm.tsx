@@ -41,7 +41,7 @@ export function SkeletonPostForm() {
   return (
     <form className="form">
       <div className="form-row">
-        <FormGroup errorMessage="Placeholder Error Message">
+        <FormGroup>
           <label htmlFor="title">Title</label>
           <SkeletonInput />
         </FormGroup>
