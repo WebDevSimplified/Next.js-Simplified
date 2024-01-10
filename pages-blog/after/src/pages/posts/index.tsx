@@ -1,11 +1,18 @@
 import { FormGroup } from "@/components/FormGroup"
 import { PostCard } from "@/components/PostCard"
+import { getPosts } from "@/db/posts"
+import { getUsers } from "@/db/users"
+import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Link from "next/link"
-import { useRef } from "react"
+import { useRouter } from "next/router"
+import { FormEvent, useRef } from "react"
 
-export default function PostsPage() {
-  const posts: any[] = []
-
+export default function PostsPage({
+  posts,
+  userId,
+  query,
+  users,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
       <h1 className="page-title">
@@ -17,7 +24,7 @@ export default function PostsPage() {
         </div>
       </h1>
 
-      <SearchForm />
+      <SearchForm userId={userId} query={query} users={users} />
 
       <div className="card-grid">
         {posts.map(post => (
@@ -28,16 +35,33 @@ export default function PostsPage() {
   )
 }
 
-function SearchForm() {
-  const query = ""
-  const userId = ""
+function SearchForm({
+  query,
+  userId,
+  users,
+}: {
+  query: string
+  userId: string
+  users: InferGetServerSidePropsType<typeof getServerSideProps>["users"]
+}) {
   const queryRef = useRef<HTMLInputElement>(null)
   const userRef = useRef<HTMLSelectElement>(null)
+  const router = useRouter()
 
-  const users: any[] = []
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault()
+
+    router.push({
+      query: {
+        ...router.query,
+        query: queryRef.current?.value,
+        userId: userRef.current?.value,
+      },
+    })
+  }
 
   return (
-    <form className="form mb-4">
+    <form onSubmit={handleSubmit} className="form mb-4">
       <div className="form-row">
         <FormGroup>
           <label htmlFor="query">Query</label>
@@ -65,3 +89,22 @@ function SearchForm() {
     </form>
   )
 }
+
+export const getServerSideProps = (async ({ query: searchParams }) => {
+  const query = searchParams.query as string
+  const userId = searchParams.userId as string
+
+  const [posts, users] = await Promise.all([
+    getPosts({ query, userId }),
+    getUsers(),
+  ])
+
+  return {
+    props: {
+      query: query || "",
+      userId: userId || "",
+      posts,
+      users,
+    },
+  }
+}) satisfies GetServerSideProps

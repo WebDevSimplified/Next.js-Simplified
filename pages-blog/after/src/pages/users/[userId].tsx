@@ -1,11 +1,15 @@
 import { PostCard } from "@/components/PostCard"
 import { TodoItem } from "@/components/TodoItem"
+import { getUserPosts } from "@/db/posts"
+import { getUserTodos } from "@/db/todos"
+import { getUser, getUsers } from "@/db/users"
+import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 
-export default function UserPage() {
-  const user: any = {}
-  const posts: any[] = []
-  const todos: any[] = []
-
+export default function UserPage({
+  user,
+  todos,
+  posts,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
       <h1 className="page-title">{user.name}</h1>
@@ -38,3 +42,31 @@ export default function UserPage() {
     </>
   )
 }
+
+export const getStaticPaths = (async () => {
+  const users = await getUsers()
+
+  return {
+    paths: users.map(user => ({ params: { userId: user.id.toString() } })),
+    fallback: "blocking",
+  }
+}) satisfies GetStaticPaths
+
+export const getStaticProps = (async ({ params }) => {
+  const userId = params?.userId as string
+  const [user, posts, todos] = await Promise.all([
+    getUser(userId),
+    getUserPosts(userId),
+    getUserTodos(userId),
+  ])
+
+  if (user == null) return { notFound: true }
+
+  return {
+    props: {
+      user,
+      posts,
+      todos,
+    },
+  }
+}) satisfies GetStaticProps

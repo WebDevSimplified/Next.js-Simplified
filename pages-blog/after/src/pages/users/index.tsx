@@ -1,8 +1,10 @@
+import { getUsers } from "@/db/users"
+import { GetStaticProps, InferGetStaticPropsType } from "next"
 import Link from "next/link"
 
-export default function UsersPage() {
-  const users: any[] = []
-
+export default function UsersPage({
+  users,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
       <h1 className="page-title">Users</h1>
@@ -26,3 +28,13 @@ export default function UsersPage() {
     </>
   )
 }
+
+export const getStaticProps = (async () => {
+  const users = await getUsers()
+
+  return {
+    props: {
+      users,
+    },
+  }
+}) satisfies GetStaticProps

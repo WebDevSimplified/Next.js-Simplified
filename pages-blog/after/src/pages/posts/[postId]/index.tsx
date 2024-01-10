@@ -1,10 +1,27 @@
+import { getPostComments } from "@/db/comments"
+import { getPost } from "@/db/posts"
+import { getUser } from "@/db/users"
+import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Link from "next/link"
+import { useRouter } from "next/router"
+import { useState } from "react"
 
-export default function PostPage() {
-  const postId = "1"
-  const post: any = {}
-  const user: any = {}
-  const comments: any[] = []
+export default function PostPage({
+  postId,
+  post,
+  user,
+  comments,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [isDeleting, setIsDeleting] = useState(false)
+  const router = useRouter()
+
+  function deletePost() {
+    setIsDeleting(true)
+
+    fetch(`/api/posts/${postId}`, { method: "DELETE" }).then(() => {
+      router.push("/posts")
+    })
+  }
 
   return (
     <>
@@ -14,7 +31,13 @@ export default function PostPage() {
           <Link className="btn btn-outline" href={`/posts/${postId}/edit`}>
             Edit
           </Link>
-          <button className="btn btn-outline btn-danger">Delete</button>
+          <button
+            onClick={deletePost}
+            disabled={isDeleting}
+            className="btn btn-outline btn-danger"
+          >
+            {isDeleting ? "Deleting" : "Delete"}
+          </button>
         </div>
       </h1>
       <span className="page-subtitle">
@@ -36,3 +59,23 @@ export default function PostPage() {
     </>
   )
 }
+
+export const getServerSideProps = (async ({ params }) => {
+  const postId = params?.postId as string
+
+  const comments = getPostComments(postId)
+  const post = await getPost(postId)
+  if (post == null) return { notFound: true }
+
+  const user = await getUser(post.userId)
+  if (user == null) return { notFound: true }
+
+  return {
+    props: {
+      postId,
+      post,
+      user,
+      comments: await comments,
+    },
+  }
+}) satisfies GetServerSideProps

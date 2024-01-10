@@ -1,6 +1,6 @@
 import { PostForm } from "@/components/PostForm"
 
-export default async function EditPostPage() {
+export default function EditPostPage() {
   const post: any = {}
 
   return (
