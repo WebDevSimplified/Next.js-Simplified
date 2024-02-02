@@ -1,7 +1,6 @@
 import { deletePost, updatePost } from "@/db/posts"
 import { validatePost } from "@/lib/validatePost"
 import { NextApiRequest, NextApiResponse } from "next"
-import { resolve } from "path"
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "DELETE") return DELETE(req, res)

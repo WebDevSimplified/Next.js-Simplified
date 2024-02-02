@@ -5,7 +5,7 @@ import { getUsers } from "@/db/users"
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { FormEvent, useRef } from "react"
+import { FormEvent, useRef, useState } from "react"
 
 export default function PostsPage({
   posts,
@@ -44,6 +44,7 @@ function SearchForm({
   userId: string
   users: InferGetServerSidePropsType<typeof getServerSideProps>["users"]
 }) {
+  const [isFiltering, setIsFiltering] = useState(false)
   const queryRef = useRef<HTMLInputElement>(null)
   const userRef = useRef<HTMLSelectElement>(null)
   const router = useRouter()
@@ -51,13 +52,18 @@ function SearchForm({
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
 
-    router.push({
-      query: {
-        ...router.query,
-        query: queryRef.current?.value,
-        userId: userRef.current?.value,
-      },
-    })
+    setIsFiltering(true)
+    router
+      .push({
+        query: {
+          ...router.query,
+          query: queryRef.current?.value,
+          userId: userRef.current?.value,
+        },
+      })
+      .then(() => {
+        setIsFiltering(false)
+      })
   }
 
   return (
@@ -84,7 +90,9 @@ function SearchForm({
             ))}
           </select>
         </FormGroup>
-        <button className="btn">Filter</button>
+        <button disabled={isFiltering} className="btn">
+          {isFiltering ? "Filtering" : "Filter"}
+        </button>
       </div>
     </form>
   )
