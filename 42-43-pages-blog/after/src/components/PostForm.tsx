@@ -10,15 +10,15 @@ type Props = {
 
 export function PostForm({ post, users }: Props) {
   const titleRef = useRef<HTMLInputElement>(null)
-  const bodyRef = useRef<HTMLTextAreaElement>(null)
   const userIdRef = useRef<HTMLSelectElement>(null)
+  const bodyRef = useRef<HTMLTextAreaElement>(null)
   const router = useRouter()
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState<{
     title?: string
     body?: string
     userId?: string
   }>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -29,8 +29,8 @@ export function PostForm({ post, users }: Props) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         title: titleRef.current?.value,
-        body: bodyRef.current?.value,
         userId: Number(userIdRef.current?.value),
+        body: bodyRef.current?.value,
       }),
     })
       .then(res => {
@@ -38,7 +38,7 @@ export function PostForm({ post, users }: Props) {
         return res.json().then(data => Promise.reject(data))
       })
       .then(post => {
-        router.push(`/posts/${post.id}`)
+        return router.push(`/posts/${post.id}`)
       })
       .catch(errors => {
         setErrors(errors)
@@ -58,8 +58,8 @@ export function PostForm({ post, users }: Props) {
             name="title"
             id="title"
             required
-            defaultValue={post?.title}
             ref={titleRef}
+            defaultValue={post?.title}
           />
         </FormGroup>
         <FormGroup errorMessage={errors.userId}>
@@ -83,11 +83,11 @@ export function PostForm({ post, users }: Props) {
         <FormGroup errorMessage={errors.body}>
           <label htmlFor="body">Body</label>
           <textarea
+            ref={bodyRef}
             required
             name="body"
             id="body"
             defaultValue={post?.body}
-            ref={bodyRef}
           />
         </FormGroup>
       </div>

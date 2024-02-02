@@ -1,7 +1,7 @@
 import { PostForm } from "@/components/PostForm"
 import { getPost } from "@/db/posts"
-import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import { getUsers } from "@/db/users"
+import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 
 export default function EditPostPage({
   users,
@@ -16,17 +16,12 @@ export default function EditPostPage({
 }
 
 export const getServerSideProps = (async ({ params }) => {
-  const [post, users] = await Promise.all([
-    getPost(params?.postId as string),
+  const [users, post] = await Promise.all([
     getUsers(),
+    getPost(params?.postId as string),
   ])
 
   if (post == null) return { notFound: true }
 
-  return {
-    props: {
-      post,
-      users,
-    },
-  }
+  return { props: { users, post } }
 }) satisfies GetServerSideProps

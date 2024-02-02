@@ -1,6 +1,6 @@
 import { PostForm } from "@/components/PostForm"
-import { GetStaticProps, InferGetStaticPropsType } from "next"
 import { getUsers } from "@/db/users"
+import { GetStaticProps, InferGetStaticPropsType } from "next"
 
 export default function NewPostPage({
   users,
@@ -16,9 +16,5 @@ export default function NewPostPage({
 export const getStaticProps = (async () => {
   const users = await getUsers()
 
-  return {
-    props: {
-      users,
-    },
-  }
+  return { props: { users } }
 }) satisfies GetStaticProps

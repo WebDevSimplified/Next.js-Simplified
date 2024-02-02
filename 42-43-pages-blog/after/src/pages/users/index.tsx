@@ -32,9 +32,5 @@ export default function UsersPage({
 export const getStaticProps = (async () => {
   const users = await getUsers()
 
-  return {
-    props: {
-      users,
-    },
-  }
+  return { props: { users } }
 }) satisfies GetStaticProps

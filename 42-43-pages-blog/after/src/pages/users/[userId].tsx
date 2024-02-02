@@ -7,8 +7,8 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next"
 
 export default function UserPage({
   user,
-  todos,
   posts,
+  todos,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
@@ -47,7 +47,9 @@ export const getStaticPaths = (async () => {
   const users = await getUsers()
 
   return {
-    paths: users.map(user => ({ params: { userId: user.id.toString() } })),
+    paths: users.map(user => {
+      return { params: { userId: user.id.toString() } }
+    }),
     fallback: "blocking",
   }
 }) satisfies GetStaticPaths

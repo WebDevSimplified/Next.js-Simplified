@@ -9,9 +9,9 @@ import { FormEvent, useRef, useState } from "react"
 
 export default function PostsPage({
   posts,
-  userId,
-  query,
   users,
+  query,
+  userId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
@@ -24,7 +24,7 @@ export default function PostsPage({
         </div>
       </h1>
 
-      <SearchForm userId={userId} query={query} users={users} />
+      <SearchForm users={users} query={query} userId={userId} />
 
       <div className="card-grid">
         {posts.map(post => (
@@ -36,17 +36,17 @@ export default function PostsPage({
 }
 
 function SearchForm({
+  users,
   query,
   userId,
-  users,
 }: {
   query: string
   userId: string
   users: InferGetServerSidePropsType<typeof getServerSideProps>["users"]
 }) {
-  const [isFiltering, setIsFiltering] = useState(false)
   const queryRef = useRef<HTMLInputElement>(null)
   const userRef = useRef<HTMLSelectElement>(null)
+  const [isFiltering, setIsFiltering] = useState(false)
   const router = useRouter()
 
   function handleSubmit(e: FormEvent) {

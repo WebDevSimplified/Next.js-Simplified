@@ -9,17 +9,17 @@ import { useState } from "react"
 export default function PostPage({
   postId,
   post,
-  user,
   comments,
+  user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [isDeleting, setIsDeleting] = useState(false)
   const router = useRouter()
+  const [isDeleting, setIsDeleting] = useState(false)
 
   function deletePost() {
     setIsDeleting(true)
-
-    fetch(`/api/posts/${postId}`, { method: "DELETE" }).then(() => {
-      router.push("/posts")
+    fetch(`/api/posts/${post.id}`, { method: "DELETE" }).then(res => {
+      if (res.ok) return router.push("/posts")
+      setIsDeleting(false)
     })
   }
 
@@ -32,8 +32,8 @@ export default function PostPage({
             Edit
           </Link>
           <button
-            onClick={deletePost}
             disabled={isDeleting}
+            onClick={deletePost}
             className="btn btn-outline btn-danger"
           >
             {isDeleting ? "Deleting" : "Delete"}
@@ -62,7 +62,6 @@ export default function PostPage({
 
 export const getServerSideProps = (async ({ params }) => {
   const postId = params?.postId as string
-
   const comments = getPostComments(postId)
   const post = await getPost(postId)
   if (post == null) return { notFound: true }
@@ -72,9 +71,9 @@ export const getServerSideProps = (async ({ params }) => {
 
   return {
     props: {
-      postId,
       post,
       user,
+      postId,
       comments: await comments,
     },
   }

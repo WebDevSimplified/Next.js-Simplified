@@ -20,9 +20,5 @@ export default function TodosPage({
 export const getStaticProps = (async () => {
   const todos = await getTodos()
 
-  return {
-    props: {
-      todos,
-    },
-  }
+  return { props: { todos } }
 }) satisfies GetStaticProps
