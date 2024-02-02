@@ -4,6 +4,14 @@ For this project we will be building the same blog style application that we hav
 
 The starting code has all the pages you will need already created and mostly implemented. All the JSX is pretty much done for you, but all the data fetching/mutation is left up to you. You will notice many places in the app where the are variables defined such as `const user: any = {}` that are used as placeholders for the data that should be fetched. This is done to minimize the amount of code you actually need to create for this project since writing all the JSX from scratch would be very repetitive. The goal of this project is to implement all the logic and data fetching/mutation for the application so it works the same way as the app router version of the project.
 
+To get the database working you may need to run the following commands:
+
+1. `npm install` - This will install all the dependencies for the project.
+2. `npx prisma db push` - This will create the database and all the tables.
+3. `npx prisma db seed` - This will seed the database with data that is very similar to the data from the API.
+4. You may need to run `npx prisma generate` if you get any errors about missing types. If this doesn't fix the typing errors just run the command `TypeScript: Restart TS Server` in the VSCode command palette or restart VSCode.
+5. `npm run dev` - This will start the development server. There is no need for an API server anymore.
+
 # Database Information
 
 All the functions you need to access the database are already created in the `src/db` folder so you shouldn't need to directly interact with the database at all.
