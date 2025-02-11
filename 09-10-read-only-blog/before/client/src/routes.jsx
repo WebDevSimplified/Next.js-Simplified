@@ -1,4 +1,3 @@
-import { useRouteError } from "react-router-dom"
 import { RootLayout } from "./layouts/RootLayout"
 import { postRoute } from "./pages/Post"
 import { postListRoute } from "./pages/PostList"

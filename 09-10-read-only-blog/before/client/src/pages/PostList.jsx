@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-import { Await, defer, useLoaderData } from "react-router-dom"
+import { Await, useLoaderData } from "react-router"
 import { getPosts } from "../api/posts"
 import { PostCard, SkeletonPostCard } from "../components/PostCard"
 import { SkeletonList } from "../components/Skeleton"
@@ -28,12 +28,10 @@ function PostList() {
   )
 }
 
-async function loader({ request: { signal, url } }) {
+function loader({ request: { signal } }) {
   const posts = getPosts({ signal })
 
-  return defer({
-    postsPromise: posts,
-  })
+  return { postsPromise: posts }
 }
 
 export const postListRoute = {
