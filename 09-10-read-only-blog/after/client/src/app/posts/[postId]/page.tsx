@@ -5,11 +5,13 @@ import { Skeleton, SkeletonList } from "@/components/Skeleton"
 import Link from "next/link"
 import { Suspense } from "react"
 
-export default function PostPage({
-  params: { postId },
+export default async function PostPage({
+  params,
 }: {
-  params: { postId: string }
+  params: Promise<{ postId: string }>
 }) {
+  const { postId } = await params
+
   return (
     <>
       <Suspense
