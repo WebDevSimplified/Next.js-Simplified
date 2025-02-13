@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, Suspense } from "react"
+import { Fragment, ReactNode } from "react"
 
 export function Skeleton({
   short,
