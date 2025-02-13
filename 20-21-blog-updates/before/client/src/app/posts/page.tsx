@@ -10,7 +10,23 @@ export default function PostsPage() {
     <>
       <h1 className="page-title">Posts</h1>
 
-      <SearchForm />
+      <form className="form mb-4">
+        <div className="form-row">
+          <FormGroup>
+            <label htmlFor="query">Query</label>
+            <input type="search" name="query" id="query" />
+          </FormGroup>
+          <FormGroup>
+            <label htmlFor="userId">Author</label>
+            <select name="userId" id="userId">
+              <Suspense fallback={<option value="">Loading...</option>}>
+                <UserSelect />
+              </Suspense>
+            </select>
+          </FormGroup>
+          <button className="btn">Filter</button>
+        </div>
+      </form>
 
       <div className="card-grid">
         <Suspense
@@ -31,28 +47,6 @@ async function PostGrid() {
   const posts = await getPosts()
 
   return posts.map(post => <PostCard key={post.id} {...post} />)
-}
-
-function SearchForm() {
-  return (
-    <form className="form mb-4">
-      <div className="form-row">
-        <FormGroup>
-          <label htmlFor="query">Query</label>
-          <input type="search" name="query" id="query" />
-        </FormGroup>
-        <FormGroup>
-          <label htmlFor="userId">Author</label>
-          <select name="userId" id="userId">
-            <Suspense fallback={<option value="">Loading...</option>}>
-              <UserSelect />
-            </Suspense>
-          </select>
-        </FormGroup>
-        <button className="btn">Filter</button>
-      </div>
-    </form>
-  )
 }
 
 async function UserSelect() {
