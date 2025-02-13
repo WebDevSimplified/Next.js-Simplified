@@ -1,15 +1,21 @@
 "use server"
 
 import { createPost, deletePost, updatePost } from "@/db/posts"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { redirect } from "next/navigation"
 
 export async function deletePostAction(postId: string | number) {
   const post = await deletePost(postId)
 
+  // TODO: Show how to do with both revalidatePath and revalidateTag and explain the pros/cons
   revalidatePath("/posts")
   revalidatePath(`/users/${post.userId}`)
   revalidatePath(`/posts/${post.id}`)
+
+  // revalidateTag("posts:all")
+  // revalidateTag(`posts:id=${post.id}`)
+  // revalidateTag(`posts:userId=${post.userId}`)
+
   redirect("/posts")
 }
 
@@ -23,9 +29,15 @@ export async function editPostAction(
 
   const post = await updatePost(postId, data)
 
+  // TODO: Show how to do with both revalidatePath and revalidateTag and explain the pros/cons
   revalidatePath("/posts")
   revalidatePath(`/posts/${post.id}`)
   revalidatePath(`/users/${post.userId}`)
+
+  // revalidateTag("posts:all")
+  // revalidateTag(`posts:id=${post.id}`)
+  // revalidateTag(`posts:userId=${post.userId}`)
+
   redirect(`/posts/${post.id}`)
 }
 
@@ -35,8 +47,17 @@ export async function createPostAction(prevState: unknown, formData: FormData) {
 
   const post = await createPost(data)
 
+  // TODO: Show how to do with both revalidatePath and revalidateTag and explain the pros/cons
   revalidatePath("/posts")
+  // Technically probably don't need to revalidate the post itself since it's new but will do so just in case since if there was a query to that particular ID from before it was created it would be a stale null return
+  revalidatePath(`/posts/${post.id}`)
   revalidatePath(`/users/${post.userId}`)
+
+  // revalidateTag("posts:all")
+  // Technically probably don't need to revalidate the post itself since it's new but will do so just in case since if there was a query to that particular ID from before it was created it would be a stale null return
+  // revalidateTag(`posts:id=${post.id}`)
+  // revalidateTag(`posts:userId=${post.userId}`)
+
   redirect(`/posts/${post.id}`)
 }
 

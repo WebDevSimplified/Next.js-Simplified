@@ -1,21 +1,21 @@
 "use client"
 
 import { FormGroup } from "./FormGroup"
-import { ReactNode, Suspense } from "react"
+import { ReactNode, Suspense, useActionState } from "react"
 import Link from "next/link"
 import { SkeletonInput } from "./Skeleton"
-import { useFormState, useFormStatus } from "react-dom"
-import { createPostAction, editPostAction } from "@/app/actions/post"
+import { createPostAction, editPostAction } from "@/actions/post"
 
-type Props = {
+export function PostForm({
+  userSelectOptions,
+  post,
+}: {
   userSelectOptions: ReactNode
   post?: { id: number; title: string; body: string; userId: number }
-}
-
-export function PostForm({ post, userSelectOptions }: Props) {
+}) {
   const action =
     post == null ? createPostAction : editPostAction.bind(null, post.id)
-  const [errors, formAction] = useFormState(action, {})
+  const [errors, formAction, isPending] = useActionState(action, {})
 
   return (
     <form action={formAction} className="form">
@@ -38,6 +38,7 @@ export function PostForm({ post, userSelectOptions }: Props) {
             id="userId"
             defaultValue={post?.userId}
           >
+            {/* TODO: Does this Suspense do anything */}
             <Suspense fallback={<option value="">Loading...</option>}>
               {userSelectOptions}
             </Suspense>
@@ -57,19 +58,11 @@ export function PostForm({ post, userSelectOptions }: Props) {
         >
           Cancel
         </Link>
-        <SubmitButton />
+        <button className="btn" disabled={isPending}>
+          Save
+        </button>
       </div>
     </form>
-  )
-}
-
-function SubmitButton() {
-  const { pending } = useFormStatus()
-
-  return (
-    <button disabled={pending} className="btn">
-      {pending ? "Saving" : "Save"}
-    </button>
   )
 }
 

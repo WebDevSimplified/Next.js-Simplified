@@ -1,14 +1,14 @@
 import { PostForm } from "@/components/PostForm"
 import { getPost } from "@/db/posts"
 import { notFound } from "next/navigation"
-import { UserSelectOptions } from "../../userSelectOptions"
 import { getUsers } from "@/db/users"
 
 export default async function EditPostPage({
-  params: { postId },
+  params,
 }: {
-  params: { postId: string }
+  params: Promise<{ postId: string }>
 }) {
+  const { postId } = await params
   const [post, users] = await Promise.all([getPost(postId), getUsers()])
 
   if (post == null) return notFound()
@@ -16,10 +16,20 @@ export default async function EditPostPage({
   return (
     <>
       <h1 className="page-title">Edit Post</h1>
-      <PostForm
-        userSelectOptions={<UserSelectOptions users={users} />}
-        post={post}
-      />
+      <PostForm userSelectOptions={<UserOptions users={users} />} post={post} />
     </>
   )
+}
+
+// TODO: Would it be better to pass this as just an array of users?
+async function UserOptions({
+  users,
+}: {
+  users: { id: number; name: string }[]
+}) {
+  return users.map(user => (
+    <option key={user.id} value={user.id}>
+      {user.name}
+    </option>
+  ))
 }

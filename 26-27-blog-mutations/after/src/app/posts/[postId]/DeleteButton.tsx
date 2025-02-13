@@ -1,6 +1,6 @@
 "use client"
 
-import { deletePostAction } from "@/app/actions/post"
+import { deletePostAction } from "@/actions/post"
 import { useTransition } from "react"
 
 export function DeleteButton({ postId }: { postId: string }) {
