@@ -1,16 +1,18 @@
+import { Skeleton, SkeletonList } from "@/components/Skeleton"
 import { getPostComments } from "@/db/comments"
 import { getPost } from "@/db/posts"
 import { getUser } from "@/db/users"
-import { Skeleton, SkeletonList } from "@/components/Skeleton"
 import Link from "next/link"
-import { Suspense } from "react"
 import { notFound } from "next/navigation"
+import { Suspense } from "react"
 
-export default function PostPage({
-  params: { postId },
+export default async function PostPage({
+  params,
 }: {
-  params: { postId: string }
+  params: Promise<{ postId: string }>
 }) {
+  const { postId } = await params
+
   return (
     <>
       <Suspense

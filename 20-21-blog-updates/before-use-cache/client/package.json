@@ -9,9 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^6.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.2.0-canary.56"
+    "next": "15.1.7"
   },
   "devDependencies": {
     "typescript": "^5",
@@ -19,7 +20,12 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "15.2.0-canary.56",
+    "eslint-config-next": "15.1.7",
+    "prisma": "^6.3.1",
+    "ts-node": "^10.9.2",
     "@eslint/eslintrc": "^3"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   }
 }

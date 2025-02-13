@@ -1,17 +1,18 @@
-import { getUserPosts } from "@/db/posts"
-import { getUserTodos } from "@/db/todos"
-import { getUser } from "@/db/users"
+import { getUserPosts } from "@/api/posts"
+import { getUserTodos } from "@/api/todos"
+import { getUser } from "@/api/users"
 import { PostCard, SkeletonPostCard } from "@/components/PostCard"
 import { Skeleton, SkeletonList } from "@/components/Skeleton"
 import { TodoItem } from "@/components/TodoItem"
 import { Suspense } from "react"
-import { notFound } from "next/navigation"
 
-export default function UserPage({
-  params: { userId },
+export default async function UserPage({
+  params,
 }: {
-  params: { userId: string }
+  params: Promise<{ userId: string }>
 }) {
+  const { userId } = await params
+
   return (
     <>
       <Suspense
@@ -71,22 +72,20 @@ export default function UserPage({
 async function UserDetails({ userId }: { userId: string }) {
   const user = await getUser(userId)
 
-  if (user == null) return notFound()
-
   return (
     <>
       <h1 className="page-title">{user.name}</h1>
       <div className="page-subtitle">{user.email}</div>
       <div>
-        <b>Company:</b> {user.companyName}
+        <b>Company:</b> {user.company.name}
       </div>
       <div>
         <b>Website:</b> {user.website}
       </div>
       <div>
         <b>Address:</b>{" "}
-        {`${user.street} ${user.suite}
-    ${user.city} ${user.zipcode}`}
+        {`${user.address.street} ${user.address.suite}
+    ${user.address.city} ${user.address.zipcode}`}
       </div>
     </>
   )

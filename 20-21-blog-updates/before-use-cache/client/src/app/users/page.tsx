@@ -1,4 +1,4 @@
-import { getUsers } from "@/db/users"
+import { getUsers } from "@/api/users"
 import Link from "next/link"
 
 export default async function UsersPage() {
@@ -12,7 +12,7 @@ export default async function UsersPage() {
           <div key={user.id} className="card">
             <div className="card-header">{user.name}</div>
             <div className="card-body">
-              <div>{user.companyName}</div>
+              <div>{user.company.name}</div>
               <div>{user.website}</div>
               <div>{user.email}</div>
             </div>

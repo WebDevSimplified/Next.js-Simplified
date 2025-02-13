@@ -1,23 +1,15 @@
-import { unstable_cache } from "next/cache"
 import prisma from "./db"
-import { cache } from "react"
 
-export const getTodos = unstable_cache(
-  cache(async () => {
-    await wait(2000)
+export async function getTodos() {
+  await wait(2000)
 
-    return prisma.todo.findMany()
-  }),
-  ["todos"]
-)
+  return prisma.todo.findMany()
+}
 
-export const getUserTodos = unstable_cache(
-  cache(async (userId: string | number) => {
-    await wait(2000)
-    return prisma.todo.findMany({ where: { userId: Number(userId) } })
-  }),
-  ["todos", "userId"]
-)
+export async function getUserTodos(userId: string | number) {
+  await wait(2000)
+  return prisma.todo.findMany({ where: { userId: Number(userId) } })
+}
 
 function wait(duration: number) {
   return new Promise(resolve => {

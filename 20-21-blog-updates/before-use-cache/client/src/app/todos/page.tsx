@@ -1,4 +1,4 @@
-import { getTodos } from "@/db/todos"
+import { getTodos } from "@/api/todos"
 import { Skeleton, SkeletonList } from "@/components/Skeleton"
 import { TodoItem } from "@/components/TodoItem"
 import { Suspense } from "react"

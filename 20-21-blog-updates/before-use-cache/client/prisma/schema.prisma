@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Todo {
+  id        Int     @id @default(autoincrement())
+  title     String
+  completed Boolean @default(false)
+  userId    Int
+
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id          Int    @id @default(autoincrement())
+  name        String
+  email       String
+  website     String
+  companyName String
+  city        String
+  street      String
+  zipcode     String
+  suite       String
+
+  todos Todo[]
+  posts Post[]
+}
+
+model Post {
+  id     Int    @id @default(autoincrement())
+  title  String
+  body   String
+  userId Int
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments Comment[]
+}
+
+model Comment {
+  id     Int    @id @default(autoincrement())
+  email  String
+  body   String
+  postId Int
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
