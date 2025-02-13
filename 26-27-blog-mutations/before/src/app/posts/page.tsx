@@ -4,8 +4,8 @@ import { PostCard, SkeletonPostCard } from "@/components/PostCard"
 import { SkeletonList } from "@/components/Skeleton"
 import { Suspense } from "react"
 import Form from "next/form"
-import { UserSelectOptions } from "./userSelectOptions"
 import Link from "next/link"
+import { getUsers } from "@/db/users"
 
 export default async function PostsPage({
   searchParams,
@@ -35,7 +35,7 @@ export default async function PostsPage({
             <label htmlFor="userId">Author</label>
             <select name="userId" id="userId" defaultValue={userId}>
               <Suspense fallback={<option value="">Loading...</option>}>
-                <UserSelectOptions />
+                <UserOptions />
               </Suspense>
             </select>
           </FormGroup>
@@ -63,4 +63,19 @@ async function PostGrid({ userId, query }: { userId: string; query: string }) {
   const posts = await getPosts({ query, userId })
 
   return posts.map(post => <PostCard key={post.id} {...post} />)
+}
+
+async function UserOptions() {
+  const users = await getUsers()
+
+  return (
+    <>
+      <option value="">Any</option>
+      {users.map(user => (
+        <option key={user.id} value={user.id}>
+          {user.name}
+        </option>
+      ))}
+    </>
+  )
 }

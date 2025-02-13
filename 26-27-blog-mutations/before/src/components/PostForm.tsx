@@ -2,7 +2,7 @@ import { FormGroup } from "./FormGroup"
 import { Suspense } from "react"
 import Link from "next/link"
 import { SkeletonInput } from "./Skeleton"
-import { UserSelectOptions } from "@/app/posts/userSelectOptions"
+import { getUsers } from "@/db/users"
 
 export function PostForm() {
   return (
@@ -16,7 +16,7 @@ export function PostForm() {
           <label htmlFor="userId">Author</label>
           <select name="userId" id="userId">
             <Suspense fallback={<option value="">Loading...</option>}>
-              <UserSelectOptions />
+              <UserOptions />
             </Suspense>
           </select>
         </FormGroup>
@@ -35,6 +35,16 @@ export function PostForm() {
       </div>
     </form>
   )
+}
+
+async function UserOptions() {
+  const users = await getUsers()
+
+  return users.map(user => (
+    <option key={user.id} value={user.id}>
+      {user.name}
+    </option>
+  ))
 }
 
 export function SkeletonPostForm() {
