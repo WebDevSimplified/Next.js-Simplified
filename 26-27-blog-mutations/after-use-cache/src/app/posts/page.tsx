@@ -5,6 +5,7 @@ import { PostCard, SkeletonPostCard } from "@/components/PostCard"
 import { SkeletonList } from "@/components/Skeleton"
 import { Suspense } from "react"
 import Form from "next/form"
+import Link from "next/link"
 
 type SearchParams = Promise<{ query?: string; userId?: string }>
 
@@ -15,7 +16,14 @@ export default async function PostsPage({
 }) {
   return (
     <>
-      <h1 className="page-title">Posts</h1>
+      <div className="page-title">
+        <h1>Posts</h1>
+        <div className="title-btns">
+          <Link className="btn btn-outline" href="posts/new">
+            New
+          </Link>
+        </div>
+      </div>
 
       <Form action="/posts" className="form mb-4">
         <div className="form-row">

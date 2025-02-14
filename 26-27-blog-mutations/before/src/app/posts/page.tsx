@@ -16,14 +16,14 @@ export default async function PostsPage({
 
   return (
     <>
-      <h1 className="page-title">
-        Posts
+      <div className="page-title">
+        <h1>Posts</h1>
         <div className="title-btns">
           <Link className="btn btn-outline" href="posts/new">
             New
           </Link>
         </div>
-      </h1>
+      </div>
 
       <Form action="/posts" className="form mb-4">
         <div className="form-row">

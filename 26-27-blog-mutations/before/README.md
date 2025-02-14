@@ -23,7 +23,7 @@ All the functions you need to access the database are already created in the `sr
 
 # Instructions
 
-1. Make the new post page is functional using server actions.
+1. Make sure the new post page is functional using server actions.
    - Ensure all caches are properly revalidated.
 2. Create an edit post page and make it functional using server actions.
    - Ensure all caches are properly revalidated.

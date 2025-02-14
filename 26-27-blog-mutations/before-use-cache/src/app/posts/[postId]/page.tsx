@@ -19,9 +19,9 @@ export default async function PostPage({
       <Suspense
         fallback={
           <>
-            <h1 className="page-title">
+            <div className="page-title">
               <Skeleton inline short />
-            </h1>
+            </div>
             <span className="page-subtitle">
               By: <Skeleton short inline />
             </span>

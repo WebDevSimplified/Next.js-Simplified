@@ -55,7 +55,7 @@ export async function createPostAction(prevState: unknown, formData: FormData) {
   revalidatePath(`/users/${post.userId}`)
 
   // revalidateTag("posts:all")
-  // Technically probably don't need to revalidate the post itself since it's new but will do so just in case since if there was a query to that particular ID from before it was created it would be a stale null return
+  // // Technically probably don't need to revalidate the post itself since it's new but will do so just in case since if there was a query to that particular ID from before it was created it would be a stale null return
   // revalidateTag(`posts:id=${post.id}`)
   // revalidateTag(`posts:userId=${post.userId}`)
 
