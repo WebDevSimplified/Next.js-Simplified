@@ -6,7 +6,7 @@ The starting code for this project is very similar to the previous project. The 
 2. A new `src/db` folder has been added which includes all the functions for interfacing with the database. These are one to one mappings of all the functions in the `src/api` folder.
 3. The `src/app/posts/page.tsx` route has been modified to include a search form that currently does nothing. The `loading.tsx` file has also been removed in favor of `Suspense` inside the `page.tsx` file.
 4. A `.env` file has been added which includes the `DATABASE_URL` environment variable. This is for Prisma so it knows where our database is. You do not need to change this.
-5. A new `FormGroup` component was added which is used by the `SearchForm` component.
+5. A new `FormGroup` component was added which is used by the search form.
 
 The main goal of this project is to practice working with a database instead of `fetch` as well as practice working with search parameters. To get the database working you will need to run the following commands:
 

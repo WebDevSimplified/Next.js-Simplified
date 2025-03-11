@@ -1,7 +1,7 @@
 "use server"
 
 import { createPost, deletePost, updatePost } from "@/db/posts"
-import { revalidatePath, revalidateTag } from "next/cache"
+import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
 export async function deletePostAction(postId: string | number) {

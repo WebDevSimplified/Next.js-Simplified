@@ -17,7 +17,7 @@ export default async function PostsPage({
     <>
       <h1 className="page-title">Posts</h1>
 
-      <Form action="/posts" className="form mb-4">
+      <Form action="" className="form mb-4">
         <div className="form-row">
           <FormGroup>
             <label htmlFor="query">Query</label>

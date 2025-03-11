@@ -1,17 +1,16 @@
-import { Skeleton, SkeletonList } from "@/components/Skeleton"
 import { getPostComments } from "@/db/comments"
 import { getPost } from "@/db/posts"
 import { getUser } from "@/db/users"
+import { Skeleton, SkeletonList } from "@/components/Skeleton"
 import Link from "next/link"
-import { notFound } from "next/navigation"
 import { Suspense } from "react"
+import { notFound } from "next/navigation"
 
 export default async function PostPage({
   params,
 }: {
   params: Promise<{ postId: string }>
 }) {
-  // TODO: Does this need to be in a Suspense boundary?
   const { postId } = await params
 
   return (
