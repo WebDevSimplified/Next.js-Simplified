@@ -1,11 +1,11 @@
 import { getPosts } from "@/db/posts"
+import { getUsers } from "@/db/users"
 import { FormGroup } from "@/components/FormGroup"
-import { PostCard, SkeletonPostCard } from "@/components/PostCard"
-import { SkeletonList } from "@/components/Skeleton"
+import { PostCard } from "@/components/PostCard"
 import { Suspense } from "react"
 import Form from "next/form"
+import { PostPageClient } from "./_client"
 import Link from "next/link"
-import { getUsers } from "@/db/users"
 
 export default async function PostsPage({
   searchParams,
@@ -35,37 +35,28 @@ export default async function PostsPage({
             <label htmlFor="userId">Author</label>
             <select name="userId" id="userId" defaultValue={userId}>
               <Suspense fallback={<option value="">Loading...</option>}>
-                <UserOptions />
+                <UserSelect />
               </Suspense>
             </select>
           </FormGroup>
           <button className="btn">Filter</button>
         </div>
-      </Form>
 
-      <div className="card-grid">
-        <Suspense
-          key={`${userId}-${query}`}
-          fallback={
-            <SkeletonList amount={6}>
-              <SkeletonPostCard />
-            </SkeletonList>
-          }
-        >
+        <PostPageClient>
           <PostGrid userId={userId} query={query} />
-        </Suspense>
-      </div>
+        </PostPageClient>
+      </Form>
     </>
   )
 }
 
 async function PostGrid({ userId, query }: { userId: string; query: string }) {
-  const posts = await getPosts({ query, userId })
+  const posts = await getPosts({ userId, query })
 
   return posts.map(post => <PostCard key={post.id} {...post} />)
 }
 
-async function UserOptions() {
+async function UserSelect() {
   const users = await getUsers()
 
   return (
