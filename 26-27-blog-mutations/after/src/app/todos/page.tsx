@@ -1,6 +1,6 @@
+import { getTodos } from "@/db/todos"
 import { Skeleton, SkeletonList } from "@/components/Skeleton"
 import { TodoItem } from "@/components/TodoItem"
-import { getTodos } from "@/db/todos"
 import { Suspense } from "react"
 
 export default function TodosPage() {

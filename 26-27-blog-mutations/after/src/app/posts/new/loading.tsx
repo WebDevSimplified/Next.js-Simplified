@@ -1,6 +1,5 @@
 import { SkeletonPostForm } from "@/components/PostForm"
 
-// TODO: Is this needed
 export default function LoadingNewPostPage() {
   return (
     <>

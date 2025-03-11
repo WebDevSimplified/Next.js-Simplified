@@ -1,11 +1,11 @@
-import { PostCard, SkeletonPostCard } from "@/components/PostCard"
-import { Skeleton, SkeletonList } from "@/components/Skeleton"
-import { TodoItem } from "@/components/TodoItem"
 import { getUserPosts } from "@/db/posts"
 import { getUserTodos } from "@/db/todos"
 import { getUser } from "@/db/users"
-import { notFound } from "next/navigation"
+import { PostCard, SkeletonPostCard } from "@/components/PostCard"
+import { Skeleton, SkeletonList } from "@/components/Skeleton"
+import { TodoItem } from "@/components/TodoItem"
 import { Suspense } from "react"
+import { notFound } from "next/navigation"
 
 export default async function UserPage({
   params,
@@ -87,7 +87,8 @@ async function UserDetails({ userId }: { userId: string }) {
       </div>
       <div>
         <b>Address:</b>{" "}
-        {`${user.street} ${user.suite} ${user.city} ${user.zipcode}`}
+        {`${user.street} ${user.suite}
+    ${user.city} ${user.zipcode}`}
       </div>
     </>
   )

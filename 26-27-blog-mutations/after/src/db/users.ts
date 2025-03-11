@@ -12,7 +12,7 @@ export const getUser = unstable_cache(
     await wait(2000)
     return prisma.user.findUnique({ where: { id: Number(userId) } })
   },
-  ["user", "userId"]
+  ["users", "userId"]
 )
 
 function wait(duration: number) {

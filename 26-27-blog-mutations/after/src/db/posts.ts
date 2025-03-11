@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client"
 import prisma from "./db"
-import { unstable_cache } from "next/cache"
+import { revalidateTag, unstable_cache } from "next/cache"
 
 export const getPosts = unstable_cache(
   async ({
@@ -63,13 +63,19 @@ export async function createPost({
   userId: number
 }) {
   await wait(2000)
-  return prisma.post.create({
+  const post = await prisma.post.create({
     data: {
       title,
       body,
       userId,
     },
   })
+
+  revalidateTag("posts:all")
+  revalidateTag(`posts:id=${post.id}`)
+  revalidateTag(`posts:userId=${post.userId}`)
+
+  return post
 }
 
 export async function updatePost(
@@ -85,7 +91,7 @@ export async function updatePost(
   }
 ) {
   await wait(2000)
-  return prisma.post.update({
+  const post = await prisma.post.update({
     where: { id: Number(postId) },
     data: {
       title,
@@ -93,11 +99,24 @@ export async function updatePost(
       userId,
     },
   })
+
+  revalidateTag("posts:all")
+  revalidateTag(`posts:id=${post.id}`)
+  revalidateTag(`posts:userId=${post.userId}`)
+
+  return post
 }
 
 export async function deletePost(postId: string | number) {
   await wait(2000)
-  return prisma.post.delete({ where: { id: Number(postId) } })
+
+  const post = await prisma.post.delete({ where: { id: Number(postId) } })
+
+  revalidateTag("posts:all")
+  revalidateTag(`posts:id=${post.id}`)
+  revalidateTag(`posts:userId=${post.userId}`)
+
+  return post
 }
 
 function wait(duration: number) {
