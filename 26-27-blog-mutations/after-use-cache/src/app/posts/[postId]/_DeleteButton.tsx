@@ -1,6 +1,6 @@
 "use client"
 
-import { deletePostAction } from "@/actions/post"
+import { deletePostAction } from "@/actions/posts"
 import { useTransition } from "react"
 
 export function DeleteButton({ postId }: { postId: string }) {
@@ -9,11 +9,11 @@ export function DeleteButton({ postId }: { postId: string }) {
     <button
       disabled={isPending}
       className="btn btn-outline btn-danger"
-      onClick={() => {
+      onClick={() =>
         startTransition(async () => {
           await deletePostAction(postId)
         })
-      }}
+      }
     >
       {isPending ? "Deleting" : "Delete"}
     </button>

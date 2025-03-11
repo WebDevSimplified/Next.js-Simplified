@@ -1,21 +1,26 @@
 "use client"
 
 import { FormGroup } from "./FormGroup"
-import { ReactNode, Suspense, useActionState } from "react"
+import { Suspense, useActionState } from "react"
 import Link from "next/link"
 import { SkeletonInput } from "./Skeleton"
-import { createPostAction, editPostAction } from "@/actions/post"
+import { createPostAction, editPostAction } from "@/actions/posts"
 
 export function PostForm({
-  userSelectOptions,
+  users,
   post,
 }: {
-  userSelectOptions: ReactNode
-  post?: { id: number; title: string; body: string; userId: number }
+  users: { id: number; name: string }[]
+  post?: {
+    id: number
+    title: string
+    userId: number
+    body: string
+  }
 }) {
   const action =
     post == null ? createPostAction : editPostAction.bind(null, post.id)
-  const [errors, formAction, isPending] = useActionState(action, {})
+  const [errors, formAction, pending] = useActionState(action, {})
 
   return (
     <form action={formAction} className="form">
@@ -23,24 +28,27 @@ export function PostForm({
         <FormGroup errorMessage={errors.title}>
           <label htmlFor="title">Title</label>
           <input
+            required
             type="text"
             name="title"
             id="title"
-            required
             defaultValue={post?.title}
           />
         </FormGroup>
         <FormGroup errorMessage={errors.userId}>
           <label htmlFor="userId">Author</label>
           <select
+            required
             name="userId"
             id="userId"
-            required
             defaultValue={post?.userId}
           >
-            {/* TODO: Does this Suspense do anything */}
             <Suspense fallback={<option value="">Loading...</option>}>
-              {userSelectOptions}
+              {users.map(user => (
+                <option key={user.id} value={user.id}>
+                  {user.name}
+                </option>
+              ))}
             </Suspense>
           </select>
         </FormGroup>
@@ -54,12 +62,12 @@ export function PostForm({
       <div className="form-row form-btn-row">
         <Link
           className="btn btn-outline"
-          href={post ? `/posts/${post.id}` : "/posts"}
+          href={post == null ? "/posts" : `/posts/${post.id}`}
         >
           Cancel
         </Link>
-        <button className="btn" disabled={isPending}>
-          Save
+        <button disabled={pending} className="btn">
+          {pending ? "Saving" : "Save"}
         </button>
       </div>
     </form>

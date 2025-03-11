@@ -25,7 +25,7 @@ export default async function PostsPage({
         </div>
       </div>
 
-      <Form action="/posts" className="form mb-4">
+      <Form action="" className="form mb-4">
         <div className="form-row">
           <FormGroup>
             <label htmlFor="query">Query</label>
@@ -80,7 +80,7 @@ async function SearchSelect({ searchParams }: { searchParams: SearchParams }) {
   return (
     <select name="userId" id="userId" defaultValue={userId}>
       <Suspense fallback={<option value="">Loading...</option>}>
-        <UserOptions />
+        <UserSelect />
       </Suspense>
     </select>
   )
@@ -115,7 +115,7 @@ async function PostGridInner({
   return posts.map(post => <PostCard key={post.id} {...post} />)
 }
 
-async function UserOptions() {
+async function UserSelect() {
   const users = await getUsers()
 
   return (

@@ -60,7 +60,10 @@ export function PostForm({
         </FormGroup>
       </div>
       <div className="form-row form-btn-row">
-        <Link className="btn btn-outline" href="/posts">
+        <Link
+          className="btn btn-outline"
+          href={post == null ? "/posts" : `/posts/${post.id}`}
+        >
           Cancel
         </Link>
         <button disabled={pending} className="btn">

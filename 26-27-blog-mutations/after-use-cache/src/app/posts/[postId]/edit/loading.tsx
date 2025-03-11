@@ -1,6 +1,5 @@
 import { SkeletonPostForm } from "@/components/PostForm"
 
-// TODO: Can this be structured better to use Suspense instead
 export default function LoadingEditPostPage() {
   return (
     <>

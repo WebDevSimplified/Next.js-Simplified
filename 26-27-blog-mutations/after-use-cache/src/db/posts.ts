@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client"
 import prisma from "./db"
 import { cacheTag } from "next/dist/server/use-cache/cache-tag"
+import { revalidateTag } from "next/cache"
 
 export async function getPosts({
   query,
@@ -42,7 +43,7 @@ export async function getUserPosts(userId: string | number) {
   return prisma.post.findMany({ where: { userId: Number(userId) } })
 }
 
-export function createPost({
+export async function createPost({
   title,
   body,
   userId,
@@ -51,16 +52,23 @@ export function createPost({
   body: string
   userId: number
 }) {
-  return prisma.post.create({
+  await wait(2000)
+  const post = await prisma.post.create({
     data: {
       title,
       body,
       userId,
     },
   })
+
+  revalidateTag("posts:all")
+  revalidateTag(`posts:id=${post.id}`)
+  revalidateTag(`posts:userId=${post.userId}`)
+
+  return post
 }
 
-export function updatePost(
+export async function updatePost(
   postId: string | number,
   {
     title,
@@ -72,7 +80,8 @@ export function updatePost(
     userId: number
   }
 ) {
-  return prisma.post.update({
+  await wait(2000)
+  const post = await prisma.post.update({
     where: { id: Number(postId) },
     data: {
       title,
@@ -80,10 +89,24 @@ export function updatePost(
       userId,
     },
   })
+
+  revalidateTag("posts:all")
+  revalidateTag(`posts:id=${post.id}`)
+  revalidateTag(`posts:userId=${post.userId}`)
+
+  return post
 }
 
-export function deletePost(postId: string | number) {
-  return prisma.post.delete({ where: { id: Number(postId) } })
+export async function deletePost(postId: string | number) {
+  await wait(2000)
+
+  const post = await prisma.post.delete({ where: { id: Number(postId) } })
+
+  revalidateTag("posts:all")
+  revalidateTag(`posts:id=${post.id}`)
+  revalidateTag(`posts:userId=${post.userId}`)
+
+  return post
 }
 
 function wait(duration: number) {
