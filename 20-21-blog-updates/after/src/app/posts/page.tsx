@@ -1,42 +1,49 @@
 import { getPosts } from "@/db/posts"
 import { getUsers } from "@/db/users"
 import { FormGroup } from "@/components/FormGroup"
-import { PostCard, SkeletonPostCard } from "@/components/PostCard"
-import { SkeletonList } from "@/components/Skeleton"
+import { PostCard } from "@/components/PostCard"
 import { Suspense } from "react"
-import { SearchForm } from "./searchForm"
+import Form from "next/form"
+import { PostPageClient } from "./_client"
 
-type PageProps = {
-  searchParams: { query?: string; userId?: string }
-}
+export default async function PostsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ query?: string; userId?: string }>
+}) {
+  const { query = "", userId = "" } = await searchParams
 
-export default function PostsPage({
-  searchParams: { userId = "", query = "" },
-}: PageProps) {
   return (
     <>
       <h1 className="page-title">Posts</h1>
 
-      <SearchForm userOptions={<UserSelect />} />
+      <Form action="" className="form mb-4">
+        <div className="form-row">
+          <FormGroup>
+            <label htmlFor="query">Query</label>
+            <input type="search" name="query" id="query" defaultValue={query} />
+          </FormGroup>
+          <FormGroup>
+            <label htmlFor="userId">Author</label>
+            <select name="userId" id="userId" defaultValue={userId}>
+              <Suspense fallback={<option value="">Loading...</option>}>
+                <UserSelect />
+              </Suspense>
+            </select>
+          </FormGroup>
+          <button className="btn">Filter</button>
+        </div>
 
-      <div className="card-grid">
-        <Suspense
-          key={`${userId}-${query}`}
-          fallback={
-            <SkeletonList amount={6}>
-              <SkeletonPostCard />
-            </SkeletonList>
-          }
-        >
+        <PostPageClient>
           <PostGrid userId={userId} query={query} />
-        </Suspense>
-      </div>
+        </PostPageClient>
+      </Form>
     </>
   )
 }
 
 async function PostGrid({ userId, query }: { userId: string; query: string }) {
-  const posts = await getPosts({ query, userId })
+  const posts = await getPosts({ userId, query })
 
   return posts.map(post => <PostCard key={post.id} {...post} />)
 }

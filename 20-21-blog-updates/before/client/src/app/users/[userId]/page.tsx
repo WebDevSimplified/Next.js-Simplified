@@ -6,11 +6,13 @@ import { Skeleton, SkeletonList } from "@/components/Skeleton"
 import { TodoItem } from "@/components/TodoItem"
 import { Suspense } from "react"
 
-export default function UserPage({
-  params: { userId },
+export default async function UserPage({
+  params,
 }: {
-  params: { userId: string }
+  params: Promise<{ userId: string }>
 }) {
+  const { userId } = await params
+
   return (
     <>
       <Suspense

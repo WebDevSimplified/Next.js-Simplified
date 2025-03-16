@@ -1,52 +1,57 @@
 import { Prisma } from "@prisma/client"
 import prisma from "./db"
-import { unstable_cache } from "next/cache"
-import { cache } from "react"
+import { revalidateTag, unstable_cache } from "next/cache"
 
 export const getPosts = unstable_cache(
-  cache(
-    async ({
-      query,
-      userId,
-    }: {
-      query?: string
-      userId?: string | number
-    } = {}) => {
-      await wait(2000)
+  async ({
+    query,
+    userId,
+  }: {
+    query?: string
+    userId?: string | number
+  } = {}) => {
+    await wait(2000)
 
-      const where: Prisma.PostFindManyArgs["where"] = {}
-      if (query) {
-        where.OR = [
-          { title: { contains: query } },
-          { body: { contains: query } },
-        ]
-      }
-
-      if (userId) {
-        where.userId = Number(userId)
-      }
-
-      return prisma.post.findMany({ where })
+    const where: Prisma.PostFindManyArgs["where"] = {}
+    if (query) {
+      where.OR = [{ title: { contains: query } }, { body: { contains: query } }]
     }
-  ),
-  ["posts"]
+
+    if (userId) {
+      where.userId = Number(userId)
+    }
+
+    return prisma.post.findMany({ where })
+  },
+  ["posts"],
+  { tags: ["posts:all"] }
 )
 
-export const getPost = unstable_cache(
-  cache(async (postId: string | number) => {
-    await wait(2000)
-    return prisma.post.findUnique({ where: { id: Number(postId) } })
-  }),
-  ["posts", "postId"]
-)
+export async function getPost(postId: string | number) {
+  const func = unstable_cache(_getPost, ["posts", "postId"], {
+    tags: [`posts:id=${postId}`],
+  })
 
-export const getUserPosts = unstable_cache(
-  cache(async (userId: string | number) => {
-    await wait(2000)
-    return prisma.post.findMany({ where: { userId: Number(userId) } })
-  }),
-  ["posts", "userId"]
-)
+  return await func(postId)
+}
+
+async function _getPost(postId: string | number) {
+  await wait(2000)
+  return prisma.post.findUnique({ where: { id: Number(postId) } })
+}
+
+export async function getUserPosts(userId: string | number) {
+  const func = unstable_cache(_getUserPosts, ["posts", "userId"], {
+    tags: [`posts:userId=${userId}`],
+  })
+
+  return await func(userId)
+}
+
+async function _getUserPosts(userId: string | number) {
+  await wait(2000)
+  return prisma.post.findMany({ where: { userId: Number(userId) } })
+}
 
 export async function createPost({
   title,
@@ -58,13 +63,19 @@ export async function createPost({
   userId: number
 }) {
   await wait(2000)
-  return prisma.post.create({
+  const post = await prisma.post.create({
     data: {
       title,
       body,
       userId,
     },
   })
+
+  revalidateTag("posts:all")
+  revalidateTag(`posts:id=${post.id}`)
+  revalidateTag(`posts:userId=${post.userId}`)
+
+  return post
 }
 
 export async function updatePost(
@@ -80,7 +91,7 @@ export async function updatePost(
   }
 ) {
   await wait(2000)
-  return prisma.post.update({
+  const post = await prisma.post.update({
     where: { id: Number(postId) },
     data: {
       title,
@@ -88,11 +99,24 @@ export async function updatePost(
       userId,
     },
   })
+
+  revalidateTag("posts:all")
+  revalidateTag(`posts:id=${post.id}`)
+  revalidateTag(`posts:userId=${post.userId}`)
+
+  return post
 }
 
 export async function deletePost(postId: string | number) {
   await wait(2000)
-  return prisma.post.delete({ where: { id: Number(postId) } })
+
+  const post = await prisma.post.delete({ where: { id: Number(postId) } })
+
+  revalidateTag("posts:all")
+  revalidateTag(`posts:id=${post.id}`)
+  revalidateTag(`posts:userId=${post.userId}`)
+
+  return post
 }
 
 function wait(duration: number) {

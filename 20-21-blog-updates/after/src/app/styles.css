@@ -82,6 +82,7 @@ body {
   display: -webkit-box;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
+  line-clamp: 5;
   overflow: hidden;
 }
 
@@ -281,9 +282,27 @@ body {
   cursor: not-allowed;
 }
 
+.btn-outline.btn-danger {
+  border-color: hsl(0, 100%, 30%);
+  color: hsl(0, 100%, 30%);
+}
+
+.btn-outline.btn-danger:hover,
+.btn-outline.btn-danger:focus {
+  background: hsl(0, 100%, 95%);
+}
+
+.btn-outline.btn-danger:disabled {
+  border-color: hsl(0, 10%, 50%);
+  color: hsl(0, 10%, 50%);
+  background: hsl(0, 10%, 90%);
+}
+
 .page-title .title-btns {
   font-size: 1.5rem;
   font-weight: normal;
+  display: flex;
+  gap: 1rem;
 }
 
 .form-group.error input,

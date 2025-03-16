@@ -4,9 +4,8 @@ The starting code for this project is very similar to the previous project. The 
 
 1. The `src/db/posts.ts` file has been updated to include functions for creating, updating, and deleting posts.
 2. The `src/app/posts/page.tsx` file has been updated to include a `New Post` button that links to the new post page.
-3. The `UserSelectOptions` component has been moved into its own file `src/app/posts/userSelectOptions.tsx`.
-4. A new page has been added for creating posts `src/app/posts/new.tsx`.
-5. New `PostForm` and `SkeletonPostForm` components has been added to the `src/components/PostForm.tsx` file.
+3. A new page has been added for creating posts `src/app/posts/new.tsx`.
+4. New `PostForm` and `SkeletonPostForm` components has been added to the `src/components/PostForm.tsx` file.
 
 The main goal of this project is to practice working with server actions and dealing with loading states, and data revalidation.
 
@@ -24,7 +23,7 @@ All the functions you need to access the database are already created in the `sr
 
 # Instructions
 
-1. Make the new post page actually functional using server actions.
+1. Make sure the new post page is functional using server actions.
    - Ensure all caches are properly revalidated.
 2. Create an edit post page and make it functional using server actions.
    - Ensure all caches are properly revalidated.
