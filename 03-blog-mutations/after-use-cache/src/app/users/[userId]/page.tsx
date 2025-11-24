@@ -12,8 +12,6 @@ export default async function UserPage({
 }: {
   params: Promise<{ userId: string }>
 }) {
-  const { userId } = await params
-
   return (
     <>
       <Suspense
@@ -37,7 +35,7 @@ export default async function UserPage({
           </>
         }
       >
-        <UserDetails userId={userId} />
+        <UserDetailsWrapper params={params} />
       </Suspense>
 
       <h3 className="mt-4 mb-2">Posts</h3>
@@ -49,7 +47,7 @@ export default async function UserPage({
             </SkeletonList>
           }
         >
-          <UserPosts userId={userId} />
+          <UserPostsWrapper params={params} />
         </Suspense>
       </div>
       <h3 className="mt-4 mb-2">Todos</h3>
@@ -63,11 +61,38 @@ export default async function UserPage({
             </SkeletonList>
           }
         >
-          <UserTodos userId={userId} />
+          <UserTodosWrapper params={params} />
         </Suspense>
       </ul>
     </>
   )
+}
+
+async function UserDetailsWrapper({
+  params,
+}: {
+  params: Promise<{ userId: string }>
+}) {
+  const { userId } = await params
+  return <UserDetails userId={userId} />
+}
+
+async function UserPostsWrapper({
+  params,
+}: {
+  params: Promise<{ userId: string }>
+}) {
+  const { userId } = await params
+  return <UserPosts userId={userId} />
+}
+
+async function UserTodosWrapper({
+  params,
+}: {
+  params: Promise<{ userId: string }>
+}) {
+  const { userId } = await params
+  return <UserTodos userId={userId} />
 }
 
 async function UserDetails({ userId }: { userId: string }) {

@@ -12,8 +12,6 @@ export default async function PostPage({
 }: {
   params: Promise<{ postId: string }>
 }) {
-  const { postId } = await params
-
   return (
     <>
       <Suspense
@@ -24,11 +22,11 @@ export default async function PostPage({
               <div className="title-btns">
                 <Link
                   className="btn btn-outline"
-                  href={`/posts/${postId}/edit`}
+                  href="#"
                 >
                   Edit
                 </Link>
-                <DeleteButton postId={postId} />
+                <button className="btn btn-outline">Delete</button>
               </div>
             </div>
             <span className="page-subtitle">
@@ -42,7 +40,7 @@ export default async function PostPage({
           </>
         }
       >
-        <PostDetails postId={postId} />
+        <PostDetailsWrapper params={params} />
       </Suspense>
 
       <h3 className="mt-4 mb-2">Comments</h3>
@@ -62,11 +60,29 @@ export default async function PostPage({
             </SkeletonList>
           }
         >
-          <Comments postId={postId} />
+          <CommentsWrapper params={params} />
         </Suspense>
       </div>
     </>
   )
+}
+
+async function PostDetailsWrapper({
+  params,
+}: {
+  params: Promise<{ postId: string }>
+}) {
+  const { postId } = await params
+  return <PostDetails postId={postId} />
+}
+
+async function CommentsWrapper({
+  params,
+}: {
+  params: Promise<{ postId: string }>
+}) {
+  const { postId } = await params
+  return <Comments postId={postId} />
 }
 
 async function PostDetails({ postId }: { postId: string }) {
