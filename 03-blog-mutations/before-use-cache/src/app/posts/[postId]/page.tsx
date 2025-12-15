@@ -11,8 +11,6 @@ export default async function PostPage({
 }: {
   params: Promise<{ postId: string }>
 }) {
-  const { postId } = await params
-
   return (
     <>
       <Suspense
@@ -32,7 +30,7 @@ export default async function PostPage({
           </>
         }
       >
-        <PostDetails postId={postId} />
+        <PostDetails params={params} />
       </Suspense>
 
       <h3 className="mt-4 mb-2">Comments</h3>
@@ -52,14 +50,19 @@ export default async function PostPage({
             </SkeletonList>
           }
         >
-          <Comments postId={postId} />
+          <Comments params={params} />
         </Suspense>
       </div>
     </>
   )
 }
 
-async function PostDetails({ postId }: { postId: string }) {
+async function PostDetails({
+  params,
+}: {
+  params: Promise<{ postId: string }>
+}) {
+  const { postId } = await params
   const post = await getPost(postId)
 
   if (post == null) return notFound()
@@ -86,7 +89,8 @@ async function UserDetails({ userId }: { userId: number }) {
   return <Link href={`/users/${user.id}`}>{user.name}</Link>
 }
 
-async function Comments({ postId }: { postId: string }) {
+async function Comments({ params }: { params: Promise<{ postId: string }> }) {
+  const { postId } = await params
   const comments = await getPostComments(postId)
 
   return comments.map(comment => (
