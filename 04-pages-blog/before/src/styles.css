@@ -324,11 +324,11 @@ body {
   animation: skeleton 1s infinite alternate ease-in-out;
 }
 
-.skeleton + .skeleton:last-child {
+.skeleton:not(.skeleton-btn) + .skeleton:not(.skeleton-btn):last-child {
   width: 75%;
 }
 
-.skeleton + .skeleton {
+.skeleton:not(.skeleton-btn) + .skeleton:not(.skeleton-btn) {
   margin-top: 0.5rem;
   width: 100%;
 }
