@@ -12,8 +12,6 @@ export default async function UserPage({
 }: {
   params: Promise<{ userId: string }>
 }) {
-  const { userId } = await params
-
   return (
     <>
       <Suspense
