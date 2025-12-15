@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client"
 import prisma from "./db"
-import { revalidateTag, unstable_cache } from "next/cache"
+import { updateTag, unstable_cache } from "next/cache"
 
 export const getPosts = unstable_cache(
   async ({
@@ -24,7 +24,7 @@ export const getPosts = unstable_cache(
     return prisma.post.findMany({ where })
   },
   ["posts"],
-  { tags: ["posts:all"] }
+  { tags: ["posts:all"] },
 )
 
 export async function getPost(postId: string | number) {
@@ -71,9 +71,9 @@ export async function createPost({
     },
   })
 
-  revalidateTag("posts:all")
-  revalidateTag(`posts:id=${post.id}`)
-  revalidateTag(`posts:userId=${post.userId}`)
+  updateTag("posts:all")
+  updateTag(`posts:id=${post.id}`)
+  updateTag(`posts:userId=${post.userId}`)
 
   return post
 }
@@ -88,7 +88,7 @@ export async function updatePost(
     title: string
     body: string
     userId: number
-  }
+  },
 ) {
   await wait(2000)
   const post = await prisma.post.update({
@@ -100,9 +100,9 @@ export async function updatePost(
     },
   })
 
-  revalidateTag("posts:all")
-  revalidateTag(`posts:id=${post.id}`)
-  revalidateTag(`posts:userId=${post.userId}`)
+  updateTag("posts:all")
+  updateTag(`posts:id=${post.id}`)
+  updateTag(`posts:userId=${post.userId}`)
 
   return post
 }
@@ -112,9 +112,9 @@ export async function deletePost(postId: string | number) {
 
   const post = await prisma.post.delete({ where: { id: Number(postId) } })
 
-  revalidateTag("posts:all")
-  revalidateTag(`posts:id=${post.id}`)
-  revalidateTag(`posts:userId=${post.userId}`)
+  updateTag("posts:all")
+  updateTag(`posts:id=${post.id}`)
+  updateTag(`posts:userId=${post.userId}`)
 
   return post
 }

@@ -1,7 +1,7 @@
 import { getPostComments } from "@/db/comments"
 import { getPost } from "@/db/posts"
 import { getUser } from "@/db/users"
-import { Skeleton, SkeletonList } from "@/components/Skeleton"
+import { Skeleton, SkeletonButton, SkeletonList } from "@/components/Skeleton"
 import Link from "next/link"
 import { Suspense } from "react"
 import { notFound } from "next/navigation"
@@ -12,8 +12,6 @@ export default async function PostPage({
 }: {
   params: Promise<{ postId: string }>
 }) {
-  const { postId } = await params
-
   return (
     <>
       <Suspense
@@ -22,13 +20,8 @@ export default async function PostPage({
             <div className="page-title">
               <Skeleton inline short />
               <div className="title-btns">
-                <Link
-                  className="btn btn-outline"
-                  href={`/posts/${postId}/edit`}
-                >
-                  Edit
-                </Link>
-                <DeleteButton postId={postId} />
+                <SkeletonButton />
+                <SkeletonButton />
               </div>
             </div>
             <span className="page-subtitle">
@@ -42,7 +35,7 @@ export default async function PostPage({
           </>
         }
       >
-        <PostDetails postId={postId} />
+        <PostDetails params={params} />
       </Suspense>
 
       <h3 className="mt-4 mb-2">Comments</h3>
@@ -62,14 +55,19 @@ export default async function PostPage({
             </SkeletonList>
           }
         >
-          <Comments postId={postId} />
+          <Comments params={params} />
         </Suspense>
       </div>
     </>
   )
 }
 
-async function PostDetails({ postId }: { postId: string }) {
+async function PostDetails({
+  params,
+}: {
+  params: Promise<{ postId: string }>
+}) {
+  const { postId } = await params
   const post = await getPost(postId)
 
   if (post == null) return notFound()
@@ -104,7 +102,8 @@ async function UserDetails({ userId }: { userId: number }) {
   return <Link href={`/users/${user.id}`}>{user.name}</Link>
 }
 
-async function Comments({ postId }: { postId: string }) {
+async function Comments({ params }: { params: Promise<{ postId: string }> }) {
+  const { postId } = await params
   const comments = await getPostComments(postId)
 
   return comments.map(comment => (

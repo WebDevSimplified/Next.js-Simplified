@@ -12,8 +12,6 @@ export default async function UserPage({
 }: {
   params: Promise<{ userId: string }>
 }) {
-  const { userId } = await params
-
   return (
     <>
       <Suspense
@@ -37,7 +35,7 @@ export default async function UserPage({
           </>
         }
       >
-        <UserDetails userId={userId} />
+        <UserDetails params={params} />
       </Suspense>
 
       <h3 className="mt-4 mb-2">Posts</h3>
@@ -49,7 +47,7 @@ export default async function UserPage({
             </SkeletonList>
           }
         >
-          <UserPosts userId={userId} />
+          <UserPosts params={params} />
         </Suspense>
       </div>
       <h3 className="mt-4 mb-2">Todos</h3>
@@ -63,14 +61,19 @@ export default async function UserPage({
             </SkeletonList>
           }
         >
-          <UserTodos userId={userId} />
+          <UserTodos params={params} />
         </Suspense>
       </ul>
     </>
   )
 }
 
-async function UserDetails({ userId }: { userId: string }) {
+async function UserDetails({
+  params,
+}: {
+  params: Promise<{ userId: string }>
+}) {
+  const { userId } = await params
   const user = await getUser(userId)
 
   if (user == null) return notFound()
@@ -94,13 +97,15 @@ async function UserDetails({ userId }: { userId: string }) {
   )
 }
 
-async function UserPosts({ userId }: { userId: string }) {
+async function UserPosts({ params }: { params: Promise<{ userId: string }> }) {
+  const { userId } = await params
   const posts = await getUserPosts(userId)
 
   return posts.map(post => <PostCard key={post.id} {...post} />)
 }
 
-async function UserTodos({ userId }: { userId: string }) {
+async function UserTodos({ params }: { params: Promise<{ userId: string }> }) {
+  const { userId } = await params
   const todos = await getUserTodos(userId)
 
   return todos.map(todo => <TodoItem key={todo.id} {...todo} />)

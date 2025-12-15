@@ -46,7 +46,7 @@ export default async function PostsPage({
                 </select>
               }
             >
-              <SearchSelect searchParams={searchParams} />
+              <UserSelect searchParams={searchParams} />
             </Suspense>
           </FormGroup>
           <button className="btn">Filter</button>
@@ -72,18 +72,6 @@ async function SearchInput({ searchParams }: { searchParams: SearchParams }) {
   const { query } = await searchParams
 
   return <input type="search" name="query" id="query" defaultValue={query} />
-}
-
-async function SearchSelect({ searchParams }: { searchParams: SearchParams }) {
-  const { userId } = await searchParams
-
-  return (
-    <select name="userId" id="userId" defaultValue={userId}>
-      <Suspense fallback={<option value="">Loading...</option>}>
-        <UserSelect />
-      </Suspense>
-    </select>
-  )
 }
 
 async function PostGrid({ searchParams }: { searchParams: SearchParams }) {
@@ -115,17 +103,17 @@ async function PostGridInner({
   return posts.map(post => <PostCard key={post.id} {...post} />)
 }
 
-async function UserSelect() {
-  const users = await getUsers()
+async function UserSelect({ searchParams }: { searchParams: SearchParams }) {
+  const [{ userId }, users] = await Promise.all([searchParams, getUsers()])
 
   return (
-    <>
+    <select name="userId" id="userId" defaultValue={userId}>
       <option value="">Any</option>
       {users.map(user => (
         <option key={user.id} value={user.id}>
           {user.name}
         </option>
       ))}
-    </>
+    </select>
   )
 }
